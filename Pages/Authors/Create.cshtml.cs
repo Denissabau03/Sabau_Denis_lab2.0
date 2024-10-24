@@ -7,8 +7,9 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Sabau_Denis_lab2.Data;
 using Sabau_Denis_lab2.Models;
+using Microsoft.EntityFrameworkCore;
 
-namespace Sabau_Denis_lab2.Pages.Books
+namespace Sabau_Denis_lab2.Pages.Authors
 {
     public class CreateModel : PageModel
     {
@@ -21,14 +22,11 @@ namespace Sabau_Denis_lab2.Pages.Books
 
         public IActionResult OnGet()
         {
-            ViewData["PublisherID"] = new SelectList(_context.Set<Publisher>(), "ID", "PublisherName");
-            ViewData["AuthorID"] = new SelectList(_context.Set<Author>(), "Id", "FullName");
-
             return Page();
         }
 
         [BindProperty]
-        public Book Book { get; set; } = default!;
+        public Author Authors { get; set; } = default!;
 
         // For more information, see https://aka.ms/RazorPagesCRUD.
         public async Task<IActionResult> OnPostAsync()
@@ -38,7 +36,19 @@ namespace Sabau_Denis_lab2.Pages.Books
                 return Page();
             }
 
-            _context.Book.Add(Book);
+            var existingFirstName = await _context.Authors
+            .FirstOrDefaultAsync(b => b.FirstName == Authors.FirstName);
+
+            var existingLastName = await _context.Authors
+            .FirstOrDefaultAsync(b => b.LastName == Authors.LastName);
+
+
+            if (existingFirstName != null && existingLastName != null)
+            {
+                throw new Exception("An author with this name already exists.");
+            }
+
+            _context.Authors.Add(Authors);
             await _context.SaveChangesAsync();
 
             return RedirectToPage("./Index");

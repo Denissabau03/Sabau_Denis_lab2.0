@@ -9,9 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using Sabau_Denis_lab2.Data;
 using Sabau_Denis_lab2.Models;
 
-
-
-namespace Sabau_Denis_lab2.Pages.Books
+namespace Sabau_Denis_lab2.Pages.Authors
 {
     public class EditModel : PageModel
     {
@@ -24,6 +22,7 @@ namespace Sabau_Denis_lab2.Pages.Books
 
         [BindProperty]
         public Book Book { get; set; } = default!;
+        public Author Author { get; set; } = default!;
 
         public async Task<IActionResult> OnGetAsync(int? id)
         {

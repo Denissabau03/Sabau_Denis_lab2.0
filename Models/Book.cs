@@ -9,7 +9,7 @@ namespace Sabau_Denis_lab2.Models
         public int ID { get; set; }
         [Display(Name = "Book Title")]
         public string Title { get; set; }
-        public string Author { get; set; }
+       
         [Column(TypeName = "decimal(6, 2)")]
         public decimal Price { get; set; }
 
@@ -17,5 +17,8 @@ namespace Sabau_Denis_lab2.Models
         public DateTime PublishingDate { get; set; }
         public int? PublisherID { get; set; }
         public Publisher? Publisher { get; set; }
+
+        public int AuthorID { get; set; }
+        public Author? Authors { get; set; }
     } //navigation property
 }

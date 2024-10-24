@@ -4,12 +4,11 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Sabau_Denis_lab2.Data;
 using Sabau_Denis_lab2.Models;
 
-namespace Sabau_Denis_lab2.Pages.Books
+namespace Sabau_Denis_lab2.Pages.Authors
 {
     public class DeleteModel : PageModel
     {
@@ -21,7 +20,7 @@ namespace Sabau_Denis_lab2.Pages.Books
         }
 
         [BindProperty]
-        public Book Book { get; set; } = default!;
+        public Author Authors { get; set; } = default!;
 
         public async Task<IActionResult> OnGetAsync(int? id)
         {
@@ -30,17 +29,16 @@ namespace Sabau_Denis_lab2.Pages.Books
                 return NotFound();
             }
 
-            var book = await _context.Book.Include(b => b.Authors).FirstOrDefaultAsync(m => m.ID == id);
-            if (book == null)
+            var authors = await _context.Authors.FirstOrDefaultAsync(m => m.Id == id);
+
+            if (authors == null)
             {
                 return NotFound();
             }
             else
             {
-                Book = book;
+                Authors = authors;
             }
-
-            ViewData["AuthorID"] = new SelectList(_context.Set<Author>(), "Id", "FullName");
             return Page();
         }
 
@@ -51,11 +49,11 @@ namespace Sabau_Denis_lab2.Pages.Books
                 return NotFound();
             }
 
-            var book = await _context.Book.FindAsync(id);
-            if (book != null)
+            var authors = await _context.Authors.FindAsync(id);
+            if (authors != null)
             {
-                Book = book;
-                _context.Book.Remove(Book);
+                Authors = authors;
+                _context.Authors.Remove(Authors);
                 await _context.SaveChangesAsync();
             }
 
