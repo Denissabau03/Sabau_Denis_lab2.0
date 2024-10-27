@@ -36,17 +36,7 @@ namespace Sabau_Denis_lab2.Pages.Authors
                 return Page();
             }
 
-            var existingFirstName = await _context.Authors
-            .FirstOrDefaultAsync(b => b.FirstName == Authors.FirstName);
-
-            var existingLastName = await _context.Authors
-            .FirstOrDefaultAsync(b => b.LastName == Authors.LastName);
-
-
-            if (existingFirstName != null && existingLastName != null)
-            {
-                throw new Exception("An author with this name already exists.");
-            }
+            
 
             _context.Authors.Add(Authors);
             await _context.SaveChangesAsync();

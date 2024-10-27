@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using Sabau_Denis_lab2.Data;
 using Sabau_Denis_lab2.Models;
 
-namespace Sabau_Denis_lab2.Pages.Publishers
+namespace Sabau_Denis_lab2.Pages.Categories
 {
     public class IndexModel : PageModel
     {
@@ -19,11 +19,12 @@ namespace Sabau_Denis_lab2.Pages.Publishers
             _context = context;
         }
 
-        public IList<Publisher> Publisher { get;set; } = default!;
+        public IList<Category> Category { get;set; } = default!;
 
         public async Task OnGetAsync()
         {
-            Publisher = await _context.Publisher.ToListAsync();
+            Category = await _context.Category
+                .ToListAsync();
         }
     }
 }

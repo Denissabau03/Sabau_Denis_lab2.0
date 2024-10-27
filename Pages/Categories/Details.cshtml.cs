@@ -6,9 +6,9 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using Sabau_Denis_lab2.Data;
-using Sabau_Denis_lab2.Models;
+using Sabau_Denis_lab2.Models;  
 
-namespace Sabau_Denis_lab2.Pages.Publishers
+namespace Sabau_Denis_lab2.Pages.Categories
 {
     public class DetailsModel : PageModel
     {
@@ -19,7 +19,7 @@ namespace Sabau_Denis_lab2.Pages.Publishers
             _context = context;
         }
 
-        public Publisher Publisher { get; set; } = default!;
+        public BookCategory BookCategory { get; set; } = default!;
 
         public async Task<IActionResult> OnGetAsync(int? id)
         {
@@ -28,14 +28,14 @@ namespace Sabau_Denis_lab2.Pages.Publishers
                 return NotFound();
             }
 
-            var publisher = await _context.Publisher.FirstOrDefaultAsync(m => m.ID == id);
-            if (publisher == null)
+            var bookcategory = await _context.BookCategory.FirstOrDefaultAsync(m => m.ID == id);
+            if (bookcategory == null)
             {
                 return NotFound();
             }
             else
             {
-                Publisher = publisher;
+                BookCategory = bookcategory;
             }
             return Page();
         }

@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Sabau_Denis_lab2.Data;
 using Sabau_Denis_lab2.Models;
 
-namespace Sabau_Denis_lab2.Pages.Publishers
+namespace Sabau_Denis_lab2.Pages.Categories
 {
     public class CreateModel : PageModel
     {
@@ -21,11 +21,12 @@ namespace Sabau_Denis_lab2.Pages.Publishers
 
         public IActionResult OnGet()
         {
+        
             return Page();
         }
 
         [BindProperty]
-        public Publisher Publisher { get; set; } = default!;
+        public Category Category { get; set; } = default!;
 
         // For more information, see https://aka.ms/RazorPagesCRUD.
         public async Task<IActionResult> OnPostAsync()
@@ -35,7 +36,7 @@ namespace Sabau_Denis_lab2.Pages.Publishers
                 return Page();
             }
 
-            _context.Publisher.Add(Publisher);
+            _context.Category.Add(Category);
             await _context.SaveChangesAsync();
 
             return RedirectToPage("./Index");

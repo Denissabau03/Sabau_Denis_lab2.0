@@ -18,7 +18,8 @@ namespace Sabau_Denis_lab2.Models
         public int? PublisherID { get; set; }
         public Publisher? Publisher { get; set; }
 
-        public int AuthorID { get; set; }
-        public Author? Authors { get; set; }
-    } //navigation property
+        public int? AuthorID { get; set; }
+        public ICollection<Author> Authors { get; set; } = new List<Author>();
+        public ICollection<BookCategory>? BookCategories { get; set; }
+    } 
 }

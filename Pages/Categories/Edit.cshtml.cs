@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using Sabau_Denis_lab2.Data;
 using Sabau_Denis_lab2.Models;
 
-namespace Sabau_Denis_lab2.Pages.Publishers
+namespace Sabau_Denis_lab2.Pages.Categories
 {
     public class EditModel : PageModel
     {
@@ -21,7 +21,7 @@ namespace Sabau_Denis_lab2.Pages.Publishers
         }
 
         [BindProperty]
-        public Publisher Publisher { get; set; } = default!;
+        public BookCategory BookCategory { get; set; } = default!;
 
         public async Task<IActionResult> OnGetAsync(int? id)
         {
@@ -30,12 +30,14 @@ namespace Sabau_Denis_lab2.Pages.Publishers
                 return NotFound();
             }
 
-            var publisher =  await _context.Publisher.FirstOrDefaultAsync(m => m.ID == id);
-            if (publisher == null)
+            var bookcategory =  await _context.BookCategory.FirstOrDefaultAsync(m => m.ID == id);
+            if (bookcategory == null)
             {
                 return NotFound();
             }
-            Publisher = publisher;
+            BookCategory = bookcategory;
+           ViewData["BookID"] = new SelectList(_context.Book, "ID", "ID");
+           ViewData["CategoryID"] = new SelectList(_context.Set<Category>(), "ID", "ID");
             return Page();
         }
 
@@ -48,7 +50,7 @@ namespace Sabau_Denis_lab2.Pages.Publishers
                 return Page();
             }
 
-            _context.Attach(Publisher).State = EntityState.Modified;
+            _context.Attach(BookCategory).State = EntityState.Modified;
 
             try
             {
@@ -56,7 +58,7 @@ namespace Sabau_Denis_lab2.Pages.Publishers
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!PublisherExists(Publisher.ID))
+                if (!BookCategoryExists(BookCategory.ID))
                 {
                     return NotFound();
                 }
@@ -69,9 +71,9 @@ namespace Sabau_Denis_lab2.Pages.Publishers
             return RedirectToPage("./Index");
         }
 
-        private bool PublisherExists(int id)
+        private bool BookCategoryExists(int id)
         {
-            return _context.Publisher.Any(e => e.ID == id);
+            return _context.BookCategory.Any(e => e.ID == id);
         }
     }
 }

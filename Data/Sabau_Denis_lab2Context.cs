@@ -15,7 +15,9 @@ namespace Sabau_Denis_lab2.Data
         }
 
         public DbSet<Sabau_Denis_lab2.Models.Book> Book { get; set; } = default!;
-        public DbSet<Publisher> Publisher { get; set; } = default!;
-        public DbSet<Author> Authors { get; set; } = default!;
+        public DbSet<Sabau_Denis_lab2.Models.Publisher> Publisher { get; set; } = default!;
+        public DbSet<Sabau_Denis_lab2.Models.Author> Authors { get; set; } = default!;
+        public DbSet<Sabau_Denis_lab2.Models.Category> Category { get; set; } = default!;
+        public DbSet<Sabau_Denis_lab2.Models.BookCategory> BookCategory { get; set; } = default!;
     }
 }
