@@ -30,14 +30,29 @@ namespace Sabau_Denis_lab2.Pages.Borrowings
                 return NotFound();
             }
 
-            var borrowing =  await _context.Borrowing.FirstOrDefaultAsync(m => m.ID == id);
+            var borrowing =  await _context.Borrowing
+                .Include(b => b.Book)
+                .Include(b => b.Member)
+                .FirstOrDefaultAsync(m => m.ID == id);
+
             if (borrowing == null)
             {
                 return NotFound();
             }
             Borrowing = borrowing;
-           ViewData["BookID"] = new SelectList(_context.Book, "ID", "ID");
-           ViewData["MemberID"] = new SelectList(_context.Member, "ID", "ID");
+
+            ViewData["MemberID"] = new SelectList(_context.Member, "ID", "FullName");
+
+            var bookList = _context.Book
+        .Include(b => b.Authors)
+        .Select(x => new
+        {
+            x.ID,
+            BookFullName = x.Title + " - " + x.Authors.LastName + " " + x.Authors.FirstName
+        }).ToList();
+
+            ViewData["BookID"] = new SelectList(bookList, "ID", "BookFullName");
+
             return Page();
         }
 
