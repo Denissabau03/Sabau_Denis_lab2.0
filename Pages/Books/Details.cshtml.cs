@@ -21,7 +21,7 @@ namespace Sabau_Denis_lab2.Pages.Books
         }
 
         public Book Book { get; set; } = default!;
-
+        public List<string> CategoryNames { get; set; } = new List<string>();
         public async Task<IActionResult> OnGetAsync(int? id)
         {
             if (id == null)
@@ -29,7 +29,10 @@ namespace Sabau_Denis_lab2.Pages.Books
                 return NotFound();
             }
 
-            var book = await _context.Book.Include(b => b.Authors).FirstOrDefaultAsync(m => m.ID == id);
+            var book = await _context.Book.Include(b => b.Authors)
+                .Include(b => b.BookCategories)
+                .ThenInclude(b => b.Category)
+                .FirstOrDefaultAsync(m => m.ID == id);
             if (book == null)
             {
                 return NotFound();
@@ -37,9 +40,12 @@ namespace Sabau_Denis_lab2.Pages.Books
             else
             {
                 Book = book;
+                CategoryNames = book.BookCategories.Select(bc => bc.Category.CategoryName).ToList();
             }
 
             ViewData["AuthorID"] = new SelectList(_context.Set<Author>(), "Id", "FullName");
+            ViewData["CategoryID"] = new SelectList(_context.Set<Category>(), "Id", "CategoryName");
+
             return Page();
         }
     }

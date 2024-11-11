@@ -22,7 +22,7 @@ namespace Sabau_Denis_lab2.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("Author", b =>
+            modelBuilder.Entity("Sabau_Denis_lab2.Models.Author", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -43,7 +43,39 @@ namespace Sabau_Denis_lab2.Migrations
                     b.ToTable("Authors");
                 });
 
-            modelBuilder.Entity("BookCategory", b =>
+            modelBuilder.Entity("Sabau_Denis_lab2.Models.Book", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"));
+
+                    b.Property<int?>("AuthorID")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("Price")
+                        .HasColumnType("decimal(6, 2)");
+
+                    b.Property<int?>("PublisherID")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("PublishingDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Title")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("ID");
+
+                    b.HasIndex("AuthorID");
+
+                    b.HasIndex("PublisherID");
+
+                    b.ToTable("Book");
+                });
+
+            modelBuilder.Entity("Sabau_Denis_lab2.Models.BookCategory", b =>
                 {
                     b.Property<int>("ID")
                         .ValueGeneratedOnAdd()
@@ -66,7 +98,33 @@ namespace Sabau_Denis_lab2.Migrations
                     b.ToTable("BookCategory");
                 });
 
-            modelBuilder.Entity("Category", b =>
+            modelBuilder.Entity("Sabau_Denis_lab2.Models.Borrowing", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"));
+
+                    b.Property<int?>("BookID")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("MemberID")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("ReturnDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("ID");
+
+                    b.HasIndex("BookID");
+
+                    b.HasIndex("MemberID");
+
+                    b.ToTable("Borrowing");
+                });
+
+            modelBuilder.Entity("Sabau_Denis_lab2.Models.Category", b =>
                 {
                     b.Property<int>("ID")
                         .ValueGeneratedOnAdd()
@@ -83,7 +141,36 @@ namespace Sabau_Denis_lab2.Migrations
                     b.ToTable("Category");
                 });
 
-            modelBuilder.Entity("Publisher", b =>
+            modelBuilder.Entity("Sabau_Denis_lab2.Models.Member", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"));
+
+                    b.Property<string>("Adress")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("FirstName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("LastName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Phone")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("ID");
+
+                    b.ToTable("Member");
+                });
+
+            modelBuilder.Entity("Sabau_Denis_lab2.Models.Publisher", b =>
                 {
                     b.Property<int>("ID")
                         .ValueGeneratedOnAdd()
@@ -92,7 +179,6 @@ namespace Sabau_Denis_lab2.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"));
 
                     b.Property<string>("PublisherName")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("ID");
@@ -102,38 +188,20 @@ namespace Sabau_Denis_lab2.Migrations
 
             modelBuilder.Entity("Sabau_Denis_lab2.Models.Book", b =>
                 {
-                    b.Property<int>("ID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                    b.HasOne("Sabau_Denis_lab2.Models.Author", "Authors")
+                        .WithMany("Books")
+                        .HasForeignKey("AuthorID");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"));
+                    b.HasOne("Sabau_Denis_lab2.Models.Publisher", "Publisher")
+                        .WithMany("Books")
+                        .HasForeignKey("PublisherID");
 
-                    b.Property<int>("AuthorID")
-                        .HasColumnType("int");
+                    b.Navigation("Authors");
 
-                    b.Property<decimal>("Price")
-                        .HasColumnType("decimal(6, 2)");
-
-                    b.Property<int?>("PublisherID")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("PublishingDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Title")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("ID");
-
-                    b.HasIndex("AuthorID");
-
-                    b.HasIndex("PublisherID");
-
-                    b.ToTable("Book");
+                    b.Navigation("Publisher");
                 });
 
-            modelBuilder.Entity("BookCategory", b =>
+            modelBuilder.Entity("Sabau_Denis_lab2.Models.BookCategory", b =>
                 {
                     b.HasOne("Sabau_Denis_lab2.Models.Book", "Book")
                         .WithMany("BookCategories")
@@ -141,7 +209,7 @@ namespace Sabau_Denis_lab2.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Category", "Category")
+                    b.HasOne("Sabau_Denis_lab2.Models.Category", "Category")
                         .WithMany("BookCategories")
                         .HasForeignKey("CategoryID")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -152,34 +220,22 @@ namespace Sabau_Denis_lab2.Migrations
                     b.Navigation("Category");
                 });
 
-            modelBuilder.Entity("Sabau_Denis_lab2.Models.Book", b =>
+            modelBuilder.Entity("Sabau_Denis_lab2.Models.Borrowing", b =>
                 {
-                    b.HasOne("Author", "Authors")
-                        .WithMany("Books")
-                        .HasForeignKey("AuthorID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.HasOne("Sabau_Denis_lab2.Models.Book", "Book")
+                        .WithMany("Borrowings")
+                        .HasForeignKey("BookID");
 
-                    b.HasOne("Publisher", "Publisher")
-                        .WithMany("Books")
-                        .HasForeignKey("PublisherID");
+                    b.HasOne("Sabau_Denis_lab2.Models.Member", "Member")
+                        .WithMany("Borrowings")
+                        .HasForeignKey("MemberID");
 
-                    b.Navigation("Authors");
+                    b.Navigation("Book");
 
-                    b.Navigation("Publisher");
+                    b.Navigation("Member");
                 });
 
-            modelBuilder.Entity("Author", b =>
-                {
-                    b.Navigation("Books");
-                });
-
-            modelBuilder.Entity("Category", b =>
-                {
-                    b.Navigation("BookCategories");
-                });
-
-            modelBuilder.Entity("Publisher", b =>
+            modelBuilder.Entity("Sabau_Denis_lab2.Models.Author", b =>
                 {
                     b.Navigation("Books");
                 });
@@ -187,6 +243,23 @@ namespace Sabau_Denis_lab2.Migrations
             modelBuilder.Entity("Sabau_Denis_lab2.Models.Book", b =>
                 {
                     b.Navigation("BookCategories");
+
+                    b.Navigation("Borrowings");
+                });
+
+            modelBuilder.Entity("Sabau_Denis_lab2.Models.Category", b =>
+                {
+                    b.Navigation("BookCategories");
+                });
+
+            modelBuilder.Entity("Sabau_Denis_lab2.Models.Member", b =>
+                {
+                    b.Navigation("Borrowings");
+                });
+
+            modelBuilder.Entity("Sabau_Denis_lab2.Models.Publisher", b =>
+                {
+                    b.Navigation("Books");
                 });
 #pragma warning restore 612, 618
         }

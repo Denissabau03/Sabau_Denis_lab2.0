@@ -21,8 +21,7 @@ namespace Sabau_Denis_lab2.Pages.Authors
         }
 
         [BindProperty]
-        public Book Book { get; set; } = default!;
-        public Author Author { get; set; } = default!;
+        public Author Authors { get; set; } = default!;
 
         public async Task<IActionResult> OnGetAsync(int? id)
         {
@@ -31,19 +30,16 @@ namespace Sabau_Denis_lab2.Pages.Authors
                 return NotFound();
             }
 
-            var book = await _context.Book.FirstOrDefaultAsync(m => m.ID == id);
-            if (book == null)
+            var authors = await _context.Authors.FirstOrDefaultAsync(m => m.Id == id);
+            if (authors == null)
             {
                 return NotFound();
             }
-            Book = book;
-            ViewData["PublisherID"] = new SelectList(_context.Set<Publisher>(), "ID", "PublisherName");
-            ViewData["AuthorID"] = new SelectList(_context.Set<Author>(), "Id", "FullName");
+            Authors = authors;
             return Page();
         }
 
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more information, see https://aka.ms/RazorPagesCRUD.
+
         public async Task<IActionResult> OnPostAsync()
         {
             if (!ModelState.IsValid)
@@ -51,7 +47,7 @@ namespace Sabau_Denis_lab2.Pages.Authors
                 return Page();
             }
 
-            _context.Attach(Book).State = EntityState.Modified;
+            _context.Attach(Authors).State = EntityState.Modified;
 
             try
             {
@@ -59,7 +55,7 @@ namespace Sabau_Denis_lab2.Pages.Authors
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!BookExists(Book.ID))
+                if (!AuthorsExists(Authors.Id))
                 {
                     return NotFound();
                 }
@@ -69,12 +65,12 @@ namespace Sabau_Denis_lab2.Pages.Authors
                 }
             }
 
-            return RedirectToPage("./Index");
+            return RedirectToPage("Books/Index");
         }
 
-        private bool BookExists(int id)
+        private bool AuthorsExists(int id)
         {
-            return _context.Book.Any(e => e.ID == id);
+            return _context.Authors.Any(e => e.Id == id);
         }
     }
 }

@@ -8,7 +8,7 @@ namespace Sabau_Denis_lab2.Models
     {
         public int ID { get; set; }
         [Display(Name = "Book Title")]
-        public string Title { get; set; }
+        public string? Title { get; set; }
        
         [Column(TypeName = "decimal(6, 2)")]
         public decimal Price { get; set; }
@@ -19,7 +19,8 @@ namespace Sabau_Denis_lab2.Models
         public Publisher? Publisher { get; set; }
 
         public int? AuthorID { get; set; }
-        public ICollection<Author> Authors { get; set; } = new List<Author>();
+        public Author? Authors { get; set; }
         public ICollection<BookCategory>? BookCategories { get; set; }
+        public ICollection<Borrowing>? Borrowings { get; set; }
     } 
 }
